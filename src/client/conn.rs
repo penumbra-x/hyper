@@ -812,14 +812,10 @@ impl Builder {
     /// Sets the maximum frame size to use for HTTP2.
     ///
     /// Passing `None` will do nothing.
-    ///
-    /// If not set, hyper will use a default.
     #[cfg(feature = "http2")]
     #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
     pub fn http2_max_frame_size(&mut self, sz: impl Into<Option<u32>>) -> &mut Self {
-        if let Some(sz) = sz.into() {
-            self.h2_builder.max_frame_size = sz;
-        }
+        self.h2_builder.max_frame_size = sz.into();
         self
     }
 
@@ -909,6 +905,46 @@ impl Builder {
     pub fn http2_max_send_buf_size(&mut self, max: usize) -> &mut Self {
         assert!(max <= std::u32::MAX as usize);
         self.h2_builder.max_send_buffer_size = max;
+        self
+    }
+
+    /// Sets the maximum concurrent streams to use for HTTP2.
+    ///
+    /// Passing `None` will do nothing.
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    pub fn http2_max_concurrent_streams(&mut self, sz: impl Into<Option<u32>>) -> &mut Self {
+        self.h2_builder.max_concurrent_streams = sz.into();
+        self
+    }
+
+    /// Sets the max header list size to use for HTTP2.
+    ///
+    /// Passing `None` will do nothing.
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    pub fn http2_max_header_list_size(&mut self, sz: impl Into<Option<u32>>) -> &mut Self {
+        self.h2_builder.max_header_list_size = sz.into();
+        self
+    }
+
+    /// Enables and disables the push feature for HTTP2.
+    ///
+    /// Passing `None` will do nothing.
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    pub fn http2_enable_push(&mut self, sz: impl Into<Option<bool>>) -> &mut Self {
+        self.h2_builder.enable_push = sz.into();
+        self
+    }
+
+    /// Sets the header table size to use for HTTP2.
+    ///
+    /// Passing `None` will do nothing.
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    pub fn http2_header_table_size(&mut self, sz: impl Into<Option<u32>>) -> &mut Self {
+        self.h2_builder.header_table_size = sz.into();
         self
     }
 
