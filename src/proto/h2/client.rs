@@ -36,7 +36,7 @@ type ConnEof = oneshot::Receiver<Never>;
 // for performance.
 const DEFAULT_CONN_WINDOW: u32 = 1024 * 1024 * 5; // 5mb
 const DEFAULT_STREAM_WINDOW: u32 = 1024 * 1024 * 2; // 2mb
-const DEFAULT_MAX_FRAME_SIZE: u32 = 1024 * 16; // 16kb
+// const DEFAULT_MAX_FRAME_SIZE: u32 = 1024 * 16; // 16kb
 const DEFAULT_MAX_SEND_BUF_SIZE: usize = 1024 * 1024; // 1mb
 
 #[derive(Clone, Debug)]
@@ -65,7 +65,7 @@ impl Default for Config {
             adaptive_window: false,
             initial_conn_window_size: DEFAULT_CONN_WINDOW,
             initial_stream_window_size: DEFAULT_STREAM_WINDOW,
-            max_frame_size: Some(DEFAULT_MAX_FRAME_SIZE),
+            max_frame_size: None,
             #[cfg(feature = "runtime")]
             keep_alive_interval: None,
             #[cfg(feature = "runtime")]
