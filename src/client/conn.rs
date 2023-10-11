@@ -54,6 +54,11 @@
 //! # }
 //! ```
 
+#[cfg(all(feature = "backports", feature = "http1"))]
+pub mod http1;
+#[cfg(all(feature = "backports", feature = "http2"))]
+pub mod http2;
+
 use std::error::Error as StdError;
 use std::fmt;
 #[cfg(not(all(feature = "http1", feature = "http2")))]
@@ -118,16 +123,30 @@ pin_project! {
 ///
 /// This is a shortcut for `Builder::new().handshake(io)`.
 /// See [`client::conn`](crate::client::conn) for more.
+#[cfg_attr(
+    feature = "deprecated",
+    deprecated(
+        note = "This function will be replaced with `client::conn::http1::handshake` and `client::conn::http2::handshake` in 1.0, enable the \"backports\" feature to use them now."
+    )
+)]
+#[cfg_attr(feature = "deprecated", allow(deprecated))]
 pub async fn handshake<T>(
     io: T,
 ) -> crate::Result<(SendRequest<crate::Body>, Connection<T, crate::Body>)>
 where
     T: AsyncRead + AsyncWrite + Unpin + Send + 'static,
 {
+    #[allow(deprecated)]
     Builder::new().handshake(io).await
 }
 
 /// The sender side of an established connection.
+#[cfg_attr(
+    feature = "deprecated",
+    deprecated(
+        note = "This type will be replaced with `client::conn::http1::SendRequest` and `client::conn::http2::SendRequest` in 1.0, enable the \"backports\" feature to use them now."
+    )
+)]
 pub struct SendRequest<B> {
     dispatch: dispatch::Sender<Request<B>, Response<Body>>,
 }
@@ -137,6 +156,12 @@ pub struct SendRequest<B> {
 /// In most cases, this should just be spawned into an executor, so that it
 /// can process incoming and outgoing messages, notice hangups, and the like.
 #[must_use = "futures do nothing unless polled"]
+#[cfg_attr(
+    feature = "deprecated",
+    deprecated(
+        note = "This type will be replaced with `client::conn::http1::Connection` and `client::conn::http2::Connection` in 1.0, enable the \"backports\" feature to use them now."
+    )
+)]
 pub struct Connection<T, B>
 where
     T: AsyncRead + AsyncWrite + Send + 'static,
@@ -149,6 +174,12 @@ where
 ///
 /// After setting options, the builder is used to create a handshake future.
 #[derive(Clone, Debug)]
+#[cfg_attr(
+    feature = "deprecated",
+    deprecated(
+        note = "This type will be replaced with `client::conn::http1::Builder` and `client::conn::http2::Builder` in 1.0, enable the \"backports\" feature to use them now."
+    )
+)]
 pub struct Builder {
     pub(super) exec: Exec,
     h09_responses: bool,
@@ -156,6 +187,8 @@ pub struct Builder {
     h1_writev: Option<bool>,
     h1_title_case_headers: bool,
     h1_preserve_header_case: bool,
+    #[cfg(feature = "ffi")]
+    h1_preserve_header_order: bool,
     h1_read_buf_exact_size: Option<usize>,
     h1_max_buf_size: Option<usize>,
     #[cfg(feature = "ffi")]
@@ -219,6 +252,7 @@ pub(super) struct Http2SendRequest<B> {
 
 // ===== impl SendRequest
 
+#[cfg_attr(feature = "deprecated", allow(deprecated))]
 impl<B> SendRequest<B> {
     /// Polls to determine whether this sender can be used yet for a request.
     ///
@@ -252,6 +286,7 @@ impl<B> SendRequest<B> {
     }
 }
 
+#[cfg_attr(feature = "deprecated", allow(deprecated))]
 impl<B> SendRequest<B>
 where
     B: HttpBody + 'static,
@@ -337,6 +372,7 @@ where
     }
 }
 
+#[cfg_attr(feature = "deprecated", allow(deprecated))]
 impl<B> Service<Request<B>> for SendRequest<B>
 where
     B: HttpBody + 'static,
@@ -354,6 +390,7 @@ where
     }
 }
 
+#[cfg_attr(feature = "deprecated", allow(deprecated))]
 impl<B> fmt::Debug for SendRequest<B> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("SendRequest").finish()
@@ -423,6 +460,7 @@ impl<B> Clone for Http2SendRequest<B> {
 
 // ===== impl Connection
 
+#[cfg_attr(feature = "deprecated", allow(deprecated))]
 impl<T, B> Connection<T, B>
 where
     T: AsyncRead + AsyncWrite + Unpin + Send + 'static,
@@ -492,7 +530,7 @@ where
     ///
     /// This setting is configured by the server peer by sending the
     /// [`SETTINGS_ENABLE_CONNECT_PROTOCOL` parameter][2] in a `SETTINGS` frame.
-    /// This method returns the currently acknowledged value recieved from the
+    /// This method returns the currently acknowledged value received from the
     /// remote.
     ///
     /// [1]: https://datatracker.ietf.org/doc/html/rfc8441#section-4
@@ -506,9 +544,10 @@ where
     }
 }
 
+#[cfg_attr(feature = "deprecated", allow(deprecated))]
 impl<T, B> Future for Connection<T, B>
 where
-    T: AsyncRead + AsyncWrite + Unpin + Send + 'static,
+    T: AsyncRead + AsyncWrite + Unpin + Send,
     B: HttpBody + Send + 'static,
     B::Data: Send,
     B::Error: Into<Box<dyn StdError + Send + Sync>>,
@@ -534,6 +573,7 @@ where
     }
 }
 
+#[cfg_attr(feature = "deprecated", allow(deprecated))]
 impl<T, B> fmt::Debug for Connection<T, B>
 where
     T: AsyncRead + AsyncWrite + fmt::Debug + Send + 'static,
@@ -546,6 +586,7 @@ where
 
 // ===== impl Builder
 
+#[cfg_attr(feature = "deprecated", allow(deprecated))]
 impl Builder {
     /// Creates a new connection builder.
     #[inline]
@@ -558,6 +599,8 @@ impl Builder {
             h1_parser_config: Default::default(),
             h1_title_case_headers: false,
             h1_preserve_header_case: false,
+            #[cfg(feature = "ffi")]
+            h1_preserve_header_order: false,
             h1_max_buf_size: None,
             #[cfg(feature = "ffi")]
             h1_headers_raw: false,
@@ -658,6 +701,24 @@ impl Builder {
         self
     }
 
+    /// Set whether HTTP/1 connections will silently ignored malformed header lines.
+    ///
+    /// If this is enabled and and a header line does not start with a valid header
+    /// name, or does not include a colon at all, the line will be silently ignored
+    /// and no error will be reported.
+    ///
+    /// Note that this setting does not affect HTTP/2.
+    ///
+    /// Default is false.
+    pub fn http1_ignore_invalid_headers_in_responses(
+        &mut self,
+        enabled: bool,
+    ) -> &mut Builder {
+        self.h1_parser_config
+            .ignore_invalid_headers_in_responses(enabled);
+        self
+    }
+
     /// Set whether HTTP/1 connections should try to use vectored writes,
     /// or always flatten into a single buffer.
     ///
@@ -701,6 +762,21 @@ impl Builder {
     /// Default is false.
     pub fn http1_preserve_header_case(&mut self, enabled: bool) -> &mut Builder {
         self.h1_preserve_header_case = enabled;
+        self
+    }
+
+    /// Set whether to support preserving original header order.
+    ///
+    /// Currently, this will record the order in which headers are received, and store this
+    /// ordering in a private extension on the `Response`. It will also look for and use
+    /// such an extension in any provided `Request`.
+    ///
+    /// Note that this setting does not affect HTTP/2.
+    ///
+    /// Default is false.
+    #[cfg(feature = "ffi")]
+    pub fn http1_preserve_header_order(&mut self, enabled: bool) -> &mut Builder {
+        self.h1_preserve_header_order = enabled;
         self
     }
 
@@ -987,6 +1063,10 @@ impl Builder {
                     if opts.h1_preserve_header_case {
                         conn.set_preserve_header_case();
                     }
+                    #[cfg(feature = "ffi")]
+                    if opts.h1_preserve_header_order {
+                        conn.set_preserve_header_order();
+                    }
                     if opts.h09_responses {
                         conn.set_h09_responses();
                     }
@@ -1080,9 +1160,11 @@ where
 trait AssertSend: Send {}
 trait AssertSendSync: Send + Sync {}
 
+#[cfg_attr(feature = "deprecated", allow(deprecated))]
 #[doc(hidden)]
 impl<B: Send> AssertSendSync for SendRequest<B> {}
 
+#[cfg_attr(feature = "deprecated", allow(deprecated))]
 #[doc(hidden)]
 impl<T: Send, B: Send> AssertSend for Connection<T, B>
 where
@@ -1092,6 +1174,7 @@ where
 {
 }
 
+#[cfg_attr(feature = "deprecated", allow(deprecated))]
 #[doc(hidden)]
 impl<T: Send + Sync, B: Send + Sync> AssertSendSync for Connection<T, B>
 where
@@ -1101,6 +1184,7 @@ where
 {
 }
 
+#[cfg_attr(feature = "deprecated", allow(deprecated))]
 #[doc(hidden)]
 impl AssertSendSync for Builder {}
 
