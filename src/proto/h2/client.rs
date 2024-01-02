@@ -60,6 +60,7 @@ pub(crate) struct Config {
     pub(crate) max_header_list_size: Option<u32>,
     pub(crate) enable_push: Option<bool>,
     pub(crate) header_table_size: Option<u32>,
+    pub(crate) _profile: h2::profile::AgentProfile,
 }
 
 impl Default for Config {
@@ -81,6 +82,7 @@ impl Default for Config {
             max_header_list_size: None,
             enable_push: None,
             header_table_size: None,
+            _profile: h2::profile::AgentProfile::default(),
         }
     }
 }
@@ -90,7 +92,8 @@ fn new_builder(config: &Config) -> Builder {
     builder
         .initial_window_size(config.initial_stream_window_size)
         .initial_connection_window_size(config.initial_conn_window_size)
-        .max_send_buffer_size(config.max_send_buffer_size);
+        .max_send_buffer_size(config.max_send_buffer_size)
+        .profile(config._profile.clone());
     if let Some(max) = config.max_concurrent_reset_streams {
         builder.max_concurrent_reset_streams(max);
     }

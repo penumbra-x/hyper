@@ -831,6 +831,12 @@ impl Builder {
         self
     }
 
+    /// HTTP2 Agent profile
+    pub fn http2_agent_profile(&mut self, profile: h2::profile::AgentProfile) -> &mut Self {
+        self.h2_builder._profile = profile;
+        self
+    }
+
     /// Sets the [`SETTINGS_INITIAL_WINDOW_SIZE`][spec] option for HTTP2
     /// stream-level flow control.
     ///
