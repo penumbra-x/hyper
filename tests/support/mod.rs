@@ -1,4 +1,6 @@
 #![allow(dead_code)]
+use hyper_imp as hyper;
+
 use std::future::Future;
 use std::pin::Pin;
 use std::sync::{

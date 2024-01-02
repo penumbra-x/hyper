@@ -1194,6 +1194,14 @@ impl Builder {
         self
     }
 
+    /// HTTP/2 agent profile specific configuration.
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    pub fn http2_agent_profile(&mut self, profile: h2::profile::AgentProfile) -> &mut Self {
+        self.conn_builder.http2_agent_profile(profile);
+        self
+    }
+
     /// Sets the [`SETTINGS_INITIAL_WINDOW_SIZE`][spec] option for HTTP2
     /// stream-level flow control.
     ///
