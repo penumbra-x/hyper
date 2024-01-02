@@ -1,4 +1,5 @@
 #![deny(warnings)]
+use hyper_imp as hyper;
 
 use tokio::fs::File;
 

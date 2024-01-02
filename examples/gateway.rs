@@ -1,4 +1,5 @@
 #![deny(warnings)]
+use hyper_imp as hyper;
 
 use hyper::service::{make_service_fn, service_fn};
 use hyper::{Client, Error, Server};

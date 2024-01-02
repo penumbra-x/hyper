@@ -1,5 +1,5 @@
 #![deny(warnings)]
-
+use hyper_imp as hyper;
 use bytes::Buf;
 use futures_util::{stream, StreamExt};
 use hyper::client::HttpConnector;

@@ -1,3 +1,5 @@
+use hyper_imp as hyper;
+
 use hyper::service::Service;
 use hyper::{Body, Request, Response, Server};
 

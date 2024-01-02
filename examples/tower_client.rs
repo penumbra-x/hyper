@@ -1,4 +1,5 @@
 #![deny(warnings)]
+use hyper_imp as hyper;
 
 use std::future::Future;
 use std::pin::Pin;
