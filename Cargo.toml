@@ -1,6 +1,6 @@
 [package]
 name = "hyper_imp"
-version = "0.14.31"
+version = "0.14.32"
 description = "A fast and correct HTTP library."
 readme = "README.md"
 homepage = "https://hyper.rs"
@@ -70,7 +70,7 @@ pnet_datalink = "0.27.2"
 
 [features]
 # Nothing by default
-default = ["full"]
+default = []
 
 # Easily turn it all on
 full = [
