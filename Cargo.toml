@@ -1,6 +1,6 @@
 [package]
 name = "hyper_imp"
-version = "0.14.35"
+version = "0.14.36"
 description = "A fast and correct HTTP library."
 readme = "README.md"
 homepage = "https://hyper.rs"
@@ -27,7 +27,7 @@ futures-util = { version = "0.3", default-features = false }
 http = "0.2.11"
 http-body = "0.4.6"
 httpdate = "1.0.3"
-h2 = { package = "h2_imp", version = "0.4.2", optional = true }
+h2 = { package = "h2_imp", version = "0.4", optional = true }
 httparse = "1.8"
 itoa = "1"
 tracing = { version = "0.1", default-features = false, features = ["std"] }
