@@ -539,6 +539,10 @@ where
             )
         })
     }
+
+    pub fn reset_pool_idle(&self) {
+        self.pool.reset_idle();
+    }
 }
 
 impl<C, B> tower_service::Service<Request<B>> for Client<C, B>

@@ -137,6 +137,14 @@ impl<T> Pool<T> {
             inner.idle_interval_ref = Some(tx);
         }
     }
+
+    /// Reset the pool's idle connections.
+    pub(crate) fn reset_idle(&self) {
+        if let Some(ref inner) = self.inner {
+            let mut inner = inner.lock().unwrap();
+            inner.idle.clear();
+        }
+    }
 }
 
 impl<T: Poolable> Pool<T> {
