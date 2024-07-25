@@ -2,6 +2,7 @@ use std::error::Error as StdError;
 use std::fmt;
 use std::mem;
 use std::time::Duration;
+use std::ops::{Deref, DerefMut};
 
 use futures_channel::oneshot;
 use futures_util::future::{self, Either, FutureExt as _, TryFutureExt as _};
@@ -46,6 +47,20 @@ struct Config {
     retry_canceled_requests: bool,
     set_host: bool,
     ver: Ver,
+}
+
+impl<C, B> Deref for Client<C, B> {
+    type Target = C;
+
+    fn deref(&self) -> &C {
+        &self.connector
+    }
+}
+
+impl<C, B> DerefMut for Client<C, B> {
+    fn deref_mut(&mut self) -> &mut C {
+        &mut self.connector
+    }
 }
 
 /// A `Future` that will resolve to an HTTP Response.
