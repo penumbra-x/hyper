@@ -555,6 +555,7 @@ where
         })
     }
 
+    /// Reset the idle timeout for the pool.
     pub fn reset_pool_idle(&self) {
         self.pool.reset_idle();
     }
