@@ -1,5 +1,5 @@
 #![deny(warnings)]
-use hyper_imp as hyper;
+use hyper_patch as hyper;
 
 use std::cell::Cell;
 use std::rc::Rc;

@@ -1,6 +1,6 @@
 #![deny(warnings)]
 #![warn(rust_2018_idioms)]
-use hyper_imp as hyper;
+use hyper_patch as hyper;
 
 use hyper::body::Buf;
 use hyper::Client;

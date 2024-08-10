@@ -1,5 +1,5 @@
 #![deny(warnings)]
-use hyper_imp as hyper;
+use hyper_patch as hyper;
 
 // Note: `hyper::upgrade` docs link to this upgrade.
 use std::str;

@@ -1,7 +1,7 @@
 #![deny(warnings)]
 #![deny(rust_2018_idioms)]
 #![cfg_attr(feature = "deprecated", allow(deprecated))]
-use hyper_imp as hyper;
+use hyper_patch as hyper;
 
 use std::convert::TryInto;
 use std::future::Future;

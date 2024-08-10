@@ -1,5 +1,5 @@
 #![deny(warnings)]
-use hyper_imp as hyper;
+use hyper_patch as hyper;
 
 use futures_util::TryStreamExt;
 use hyper::service::{make_service_fn, service_fn};

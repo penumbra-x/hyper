@@ -1,6 +1,6 @@
 // #![deny(warnings)]  // FIXME: https://github.com/rust-lang/rust/issues/62411
 #![warn(rust_2018_idioms)]
-use hyper_imp as hyper;
+use hyper_patch as hyper;
 
 use hyper::service::{make_service_fn, service_fn};
 use hyper::{Body, Method, Request, Response, Server, StatusCode};
