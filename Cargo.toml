@@ -1,6 +1,6 @@
 [package]
 name = "hyper-patch"
-version = "0.14.45"
+version = "0.14.46"
 description = "A fast and correct HTTP library."
 readme = "README.md"
 homepage = "https://github.com/crates-patch"
