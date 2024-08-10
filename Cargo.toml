@@ -28,7 +28,7 @@ http = "0.2.11"
 http-body = "0.4.6"
 httpdate = "1.0.3"
 h2 = { package = "h2-patch", version = "0.5", optional = true }
-httparse = "1.8"
+httparse = "1.9"
 itoa = "1"
 tracing = { version = "0.1", default-features = false, features = ["std"] }
 pin-project-lite = "0.2.4"
