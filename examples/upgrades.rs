@@ -1,4 +1,5 @@
 #![deny(warnings)]
+use rhyper as hyper;
 
 // Note: `hyper::upgrade` docs link to this upgrade.
 use std::str;

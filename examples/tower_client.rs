@@ -1,4 +1,5 @@
 #![deny(warnings)]
+use rhyper as hyper;
 
 use std::future::Future;
 use std::pin::Pin;
@@ -44,7 +45,7 @@ impl Service<Request<Body>> for Connector {
 
             let stream = TcpStream::connect(format!("{}:{}", host, port)).await?;
 
-            let (mut sender, conn) = hyper::client::conn::http1::handshake(stream).await?;
+            let (mut sender, conn) = hyper::client::conn::handshake(stream).await?;
 
             tokio::task::spawn(async move {
                 if let Err(err) = conn.await {

@@ -1,4 +1,5 @@
 #![deny(warnings)]
+use rhyper as hyper;
 
 use std::cell::Cell;
 use std::rc::Rc;

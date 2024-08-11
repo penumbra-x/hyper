@@ -67,6 +67,9 @@ extern crate test;
 
 pub use crate::http::{header, Method, Request, Response, StatusCode, Uri, Version};
 
+#[cfg(feature = "http2")]
+pub use h2::profile::AgentProfile;
+
 #[doc(no_inline)]
 pub use crate::http::HeaderMap;
 

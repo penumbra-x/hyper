@@ -6,6 +6,7 @@ use std::mem;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 use std::time::Duration;
+use std::ops::{Deref, DerefMut};
 
 use futures_channel::oneshot;
 use futures_util::future::{self, Either, FutureExt as _, TryFutureExt as _};
@@ -47,6 +48,20 @@ struct Config {
     retry_canceled_requests: bool,
     set_host: bool,
     ver: Ver,
+}
+
+impl<C, B> Deref for Client<C, B> {
+    type Target = C;
+
+    fn deref(&self) -> &C {
+        &self.connector
+    }
+}
+
+impl<C, B> DerefMut for Client<C, B> {
+    fn deref_mut(&mut self) -> &mut C {
+        &mut self.connector
+    }
 }
 
 /// A `Future` that will resolve to an HTTP Response.
@@ -540,6 +555,11 @@ where
                     }),
             )
         })
+    }
+
+    /// Reset the idle timeout for the pool.
+    pub fn reset_pool_idle(&self) {
+        self.pool.reset_idle();
     }
 }
 
@@ -1196,6 +1216,14 @@ impl Builder {
         self
     }
 
+    /// HTTP/2 agent profile specific configuration.
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    pub fn http2_agent_profile(&mut self, profile: h2::profile::AgentProfile) -> &mut Self {
+        self.conn_builder.http2_agent_profile(profile);
+        self
+    }
+
     /// Sets the [`SETTINGS_INITIAL_WINDOW_SIZE`][spec] option for HTTP2
     /// stream-level flow control.
     ///
@@ -1243,8 +1271,6 @@ impl Builder {
     /// Sets the maximum frame size to use for HTTP2.
     ///
     /// Passing `None` will do nothing.
-    ///
-    /// If not set, hyper will use a default.
     #[cfg(feature = "http2")]
     #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
     pub fn http2_max_frame_size(&mut self, sz: impl Into<Option<u32>>) -> &mut Self {
@@ -1337,6 +1363,46 @@ impl Builder {
     #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
     pub fn http2_max_send_buf_size(&mut self, max: usize) -> &mut Self {
         self.conn_builder.http2_max_send_buf_size(max);
+        self
+    }
+
+    /// Sets the maximum concurrent streams to use for HTTP2.
+    ///
+    /// Passing `None` will do nothing..
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    pub fn http2_max_concurrent_streams(&mut self, max: u32) -> &mut Self {
+        self.conn_builder.http2_max_concurrent_streams(max);
+        self
+    }
+
+    /// Sets the max header list size to use for HTTP2.
+    ///
+    /// Passing `None` will do nothing.
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    pub fn http2_max_header_list_size(&mut self, max: u32) -> &mut Self {
+        self.conn_builder.http2_max_header_list_size(max);
+        self
+    }
+
+    /// Enables and disables the push feature for HTTP2.
+    ///
+    /// Passing `None` will do nothing.
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    pub fn http2_enable_push(&mut self, opt: bool) -> &mut Self {
+        self.conn_builder.http2_enable_push(opt);
+        self
+    }
+
+    /// Sets the max header list size to use for HTTP2.
+    ///
+    /// Passing `None` will do nothing.
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    pub fn http2_header_table_size(&mut self, max: u32) -> &mut Self {
+        self.conn_builder.http2_header_table_size(max);
         self
     }
 

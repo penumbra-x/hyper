@@ -1,4 +1,5 @@
 #![deny(warnings)]
+use rhyper as hyper;
 
 use futures_util::TryStreamExt;
 use hyper::service::{make_service_fn, service_fn};

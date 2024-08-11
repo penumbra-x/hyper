@@ -5,6 +5,8 @@
 #[macro_use]
 extern crate matches;
 
+use rhyper as hyper;
+
 use std::io::{Read, Write};
 use std::net::{SocketAddr, TcpListener};
 use std::pin::Pin;
