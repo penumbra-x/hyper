@@ -5,7 +5,7 @@
 #[macro_use]
 extern crate matches;
 
-use hyper_patch as hyper;
+use rhyper as hyper;
 
 use std::io::{Read, Write};
 use std::net::{SocketAddr, TcpListener};

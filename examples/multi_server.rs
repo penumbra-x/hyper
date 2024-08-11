@@ -1,6 +1,6 @@
 #![deny(warnings)]
 #![warn(rust_2018_idioms)]
-use hyper_patch as hyper;
+use rhyper as hyper;
 
 use futures_util::future::join;
 use hyper::service::{make_service_fn, service_fn};

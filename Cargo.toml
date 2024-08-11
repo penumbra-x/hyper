@@ -1,11 +1,11 @@
 [package]
-name = "hyper-patch"
+name = "rhyper"
 version = "0.14.46"
 description = "A fast and correct HTTP library."
 readme = "README.md"
 homepage = "https://github.com/crates-patch"
-documentation = "https://docs.rs/hyper-patch"
-repository = "https://github.com/crates-patch/hyper-patch"
+documentation = "https://docs.rs/rhyper"
+repository = "https://github.com/crates-patch/rhyper"
 license = "MIT"
 authors = ["0x676e67 <gngppz@gmail.com>"]
 keywords = ["http", "hyper", "hyperium"]
@@ -27,7 +27,7 @@ futures-util = { version = "0.3", default-features = false }
 http = "0.2"
 http-body = "0.4.6"
 httpdate = "1.0.3"
-h2 = { package = "h2-patch", version = "0.5", optional = true }
+h2 = { package = "rh2", version = "0.3", optional = true }
 httparse = "1.9"
 itoa = "1"
 tracing = { version = "0.1", default-features = false, features = ["std"] }

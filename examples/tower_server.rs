@@ -1,5 +1,5 @@
 #![deny(warnings)]
-use hyper_patch as hyper;
+use rhyper as hyper;
 
 use std::task::{Context, Poll};
 
