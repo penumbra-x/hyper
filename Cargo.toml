@@ -25,15 +25,15 @@ futures-core = { version = "0.3", default-features = false }
 futures-channel = "0.3"
 futures-util = { version = "0.3", default-features = false }
 http = "0.2"
-http-body = "0.4.6"
-httpdate = "1.0.3"
-h2 = { package = "rh2", version = "0.3", optional = true }
+http-body = "0.4"
+httpdate = "1.0"
 httparse = "1.9"
+h2 = { package = "rh2", version = "0.3", optional = true }
 itoa = "1"
 tracing = { version = "0.1", default-features = false, features = ["std"] }
 pin-project-lite = "0.2.4"
 tower-service = "0.3"
-tokio = { version = "1", features = ["sync"] }
+tokio = { version = "1.27", features = ["sync"] }
 want = "0.3"
 
 # Optional
@@ -49,7 +49,7 @@ pretty_env_logger = "0.4"
 spmc = "0.3"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tokio = { version = "1", features = [
+tokio = { version = "1.27", features = [
     "fs",
     "macros",
     "io-std",
@@ -197,7 +197,7 @@ required-features = ["full"]
 [[example]]
 name = "tower_client"
 path = "examples/tower_client.rs"
-required-features = ["full"]
+required-features = ["full", "backports"]
 
 [[example]]
 name = "tower_server"
