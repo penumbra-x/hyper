@@ -22,6 +22,9 @@ use crate::common::{exec::BoxSendFuture, lazy as hyper_lazy, sync_wrapper::SyncW
 use crate::ext::Protocol;
 use crate::rt::Executor;
 
+#[cfg(feature = "http2")]
+use h2::frame::{StreamDependency, SettingsOrder, PseudoOrder};
+
 use super::conn;
 use super::connect::{self, sealed::Connect, Alpn, Connected, Connection};
 use super::pool::{
@@ -1216,11 +1219,30 @@ impl Builder {
         self
     }
 
-    /// HTTP/2 agent profile specific configuration.
+    /// HTTP/2 headers priority
     #[cfg(feature = "http2")]
     #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
-    pub fn http2_agent_profile(&mut self, profile: h2::profile::AgentProfile) -> &mut Self {
-        self.conn_builder.http2_agent_profile(profile);
+    pub fn http2_headers_priority(&mut self, priority: Option<StreamDependency>) -> &mut Self {
+        self.conn_builder.http2_headers_priority(priority);
+        self
+    }
+
+    /// Http2 headers pseudo header order
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    pub fn http2_headers_pseudo_order(
+        &mut self,
+        order: Option<[PseudoOrder; 4]>,
+    ) -> &mut Self {
+        self.conn_builder.http2_headers_pseudo_order(order);
+        self
+    }
+
+    /// Http2 settings order
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    pub fn http2_settings_order(&mut self, order: Option<[SettingsOrder; 2]>) -> &mut Self {
+        self.conn_builder.http2_settings_order(order);
         self
     }
 

@@ -829,9 +829,21 @@ impl Builder {
         self
     }
 
-    /// HTTP2 Agent profile
-    pub fn http2_agent_profile(&mut self, profile: h2::profile::AgentProfile) -> &mut Self {
-        self.h2_builder._profile = profile;
+    /// HTTP2 headers priority.
+    pub fn http2_headers_priority(&mut self, priority: Option<h2::frame::StreamDependency>) -> &mut Self {
+        self.h2_builder.headers_priority = priority;
+        self
+    }
+
+    /// Http2 headers pseudo header order.
+    pub fn http2_headers_pseudo_order(&mut self, order: Option<[h2::frame::PseudoOrder; 4]>) -> &mut Self {
+        self.h2_builder.headers_pseudo_order = order;
+        self
+    }
+
+    /// Http2 Settings order
+    pub fn http2_settings_order(&mut self, order: Option<[h2::frame::SettingsOrder; 2]>) -> &mut Self {
+        self.h2_builder.settings_order = order;
         self
     }
 

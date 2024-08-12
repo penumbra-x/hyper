@@ -12,6 +12,7 @@ use futures_channel::{mpsc, oneshot};
 use futures_util::future::{self, Either, FutureExt as _, TryFutureExt as _};
 use futures_util::stream::StreamExt as _;
 use h2::client::{Builder, SendRequest};
+use h2::frame::{PseudoOrder, SettingsOrder, StreamDependency};
 use h2::SendStream;
 use http::{Method, StatusCode};
 use tokio::io::{AsyncRead, AsyncWrite};
@@ -65,7 +66,9 @@ pub(crate) struct Config {
     pub(crate) max_header_list_size: Option<u32>,
     pub(crate) enable_push: Option<bool>,
     pub(crate) header_table_size: Option<u32>,
-    pub(crate) _profile: h2::profile::AgentProfile,
+    pub(crate) headers_pseudo_order: Option<[PseudoOrder; 4]>,
+    pub(crate) headers_priority: Option<StreamDependency>,
+    pub(crate) settings_order: Option<[SettingsOrder; 2]>
 }
 
 impl Default for Config {
@@ -87,7 +90,9 @@ impl Default for Config {
             max_header_list_size: None,
             enable_push: None,
             header_table_size: None,
-            _profile: h2::profile::AgentProfile::default(),
+            headers_priority: None,
+            headers_pseudo_order: None,
+            settings_order: None
         }
     }
 }
@@ -97,8 +102,7 @@ fn new_builder(config: &Config) -> Builder {
     builder
         .initial_window_size(config.initial_stream_window_size)
         .initial_connection_window_size(config.initial_conn_window_size)
-        .max_send_buffer_size(config.max_send_buffer_size)
-        .profile(config._profile.clone());
+        .max_send_buffer_size(config.max_send_buffer_size);
     if let Some(max) = config.max_concurrent_reset_streams {
         builder.max_concurrent_reset_streams(max);
     }
@@ -116,6 +120,18 @@ fn new_builder(config: &Config) -> Builder {
     }
     if let Some(max) = config.header_table_size {
         builder.header_table_size(max);
+    }
+
+    if let Some(priority) = config.headers_priority {
+        builder.headers_priority(priority);
+    }
+
+    if let Some(order) = config.headers_pseudo_order {
+        builder.headers_psuedo(order);
+    }
+
+    if let Some(order) = config.settings_order {
+        builder.settings_order(order);
     }
 
     builder
