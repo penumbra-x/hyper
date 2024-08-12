@@ -830,18 +830,24 @@ impl Builder {
     }
 
     /// HTTP2 headers priority.
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
     pub fn http2_headers_priority(&mut self, priority: Option<h2::frame::StreamDependency>) -> &mut Self {
         self.h2_builder.headers_priority = priority;
         self
     }
 
     /// Http2 headers pseudo header order.
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
     pub fn http2_headers_pseudo_order(&mut self, order: Option<[h2::frame::PseudoOrder; 4]>) -> &mut Self {
         self.h2_builder.headers_pseudo_order = order;
         self
     }
 
     /// Http2 Settings order
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
     pub fn http2_settings_order(&mut self, order: Option<[h2::frame::SettingsOrder; 2]>) -> &mut Self {
         self.h2_builder.settings_order = order;
         self
