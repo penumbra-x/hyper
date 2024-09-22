@@ -28,7 +28,7 @@ http = "0.2"
 http-body = "0.4"
 httpdate = "1.0"
 httparse = "1.9"
-h2 = { package = "rh2", version = "0.3", optional = true }
+h2 = { package = "rh2", git = "https://github.com/penumbra-x/h2", branch = "safari-patch", optional = true }
 itoa = "1"
 tracing = { version = "0.1", default-features = false, features = ["std"] }
 pin-project-lite = "0.2.4"
@@ -70,7 +70,7 @@ pnet_datalink = "0.27.2"
 
 [features]
 # Nothing by default
-default = []
+default = ["full"]
 
 # Easily turn it all on
 full = [
