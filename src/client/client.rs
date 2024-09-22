@@ -1241,7 +1241,7 @@ impl Builder {
     /// Http2 settings order
     #[cfg(feature = "http2")]
     #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
-    pub fn http2_settings_order(&mut self, order: Option<[SettingsOrder; 2]>) -> &mut Self {
+    pub fn http2_settings_order(&mut self, order: Option<Vec<SettingsOrder>>) -> &mut Self {
         self.conn_builder.http2_settings_order(order);
         self
     }
@@ -1415,6 +1415,22 @@ impl Builder {
     #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
     pub fn http2_enable_push(&mut self, opt: bool) -> &mut Self {
         self.conn_builder.http2_enable_push(opt);
+        self
+    }
+
+    /// http2_unknown_setting8
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    pub fn http2_unknown_setting8(&mut self, opt: bool) -> &mut Self {
+        self.conn_builder.http2_unknown_setting8(opt);
+        self
+    }
+
+    /// http2_unknown_setting9
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    pub fn http2_unknown_setting9(&mut self, opt: bool) -> &mut Self {
+        self.conn_builder.http2_unknown_setting9(opt);
         self
     }
 
