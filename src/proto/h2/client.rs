@@ -66,9 +66,11 @@ pub(crate) struct Config {
     pub(crate) max_header_list_size: Option<u32>,
     pub(crate) enable_push: Option<bool>,
     pub(crate) header_table_size: Option<u32>,
+    pub(crate) unknown_setting8: Option<bool>,
+    pub(crate) unknown_setting9: Option<bool>,
     pub(crate) headers_pseudo_order: Option<[PseudoOrder; 4]>,
     pub(crate) headers_priority: Option<StreamDependency>,
-    pub(crate) settings_order: Option<[SettingsOrder; 2]>
+    pub(crate) settings_order: Option<Vec<SettingsOrder>>
 }
 
 impl Default for Config {
@@ -90,9 +92,11 @@ impl Default for Config {
             max_header_list_size: None,
             enable_push: None,
             header_table_size: None,
+            unknown_setting8: None,
+            unknown_setting9: None,
             headers_priority: None,
             headers_pseudo_order: None,
-            settings_order: None
+            settings_order: None,
         }
     }
 }
@@ -121,17 +125,20 @@ fn new_builder(config: &Config) -> Builder {
     if let Some(max) = config.header_table_size {
         builder.header_table_size(max);
     }
-
+    if let Some(v) = config.unknown_setting8 {
+        builder.unknown_setting8(v);
+    }
+    if let Some(v) = config.unknown_setting9 {
+        builder.unknown_setting9(v);
+    }
     if let Some(priority) = config.headers_priority {
         builder.headers_priority(priority);
     }
-
     if let Some(order) = config.headers_pseudo_order {
         builder.headers_psuedo(order);
     }
-
-    if let Some(order) = config.settings_order {
-        builder.settings_order(order);
+    if let Some(ref order) = config.settings_order {
+        builder.settings_order(order.clone());
     }
 
     builder
