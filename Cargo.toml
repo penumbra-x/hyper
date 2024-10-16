@@ -1,6 +1,6 @@
 [package]
 name = "rhyper"
-version = "0.14.40"
+version = "0.14.50"
 description = "A fast and correct HTTP library."
 readme = "README.md"
 homepage = "https://github.com/crates-patch"
