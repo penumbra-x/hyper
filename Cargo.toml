@@ -33,7 +33,7 @@ itoa = "1"
 tracing = { version = "0.1", default-features = false, features = ["std"] }
 pin-project-lite = "0.2"
 tower-service = "0.3"
-tokio = { version = "1.27", features = ["sync"] }
+tokio = { version = "1", features = ["sync"] }
 want = "0.3"
 
 # Optional
