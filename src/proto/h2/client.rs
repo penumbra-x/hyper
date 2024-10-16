@@ -70,7 +70,7 @@ pub(crate) struct Config {
     pub(crate) unknown_setting9: Option<bool>,
     pub(crate) headers_pseudo_order: Option<[PseudoOrder; 4]>,
     pub(crate) headers_priority: Option<StreamDependency>,
-    pub(crate) settings_order: Option<Vec<SettingsOrder>>
+    pub(crate) settings_order: Option<&'static [SettingsOrder]>
 }
 
 impl Default for Config {

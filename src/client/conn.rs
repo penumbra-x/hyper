@@ -848,7 +848,7 @@ impl Builder {
     /// Http2 Settings order
     #[cfg(feature = "http2")]
     #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
-    pub fn http2_settings_order(&mut self, order: Option<Vec<h2::frame::SettingsOrder>>) -> &mut Self {
+    pub fn http2_settings_order(&mut self, order: Option<&'static [h2::frame::SettingsOrder]>) -> &mut Self {
         self.h2_builder.settings_order = order;
         self
     }
