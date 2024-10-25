@@ -138,7 +138,7 @@ fn new_builder(config: &Config) -> Builder {
         builder.headers_psuedo(order);
     }
     if let Some(ref order) = config.settings_order {
-        builder.settings_order(order.clone());
+        builder.settings_order(order);
     }
 
     builder
