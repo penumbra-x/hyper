@@ -68,6 +68,8 @@ extern crate test;
 pub use crate::http::{header, Method, Request, Response, StatusCode, Uri, Version};
 
 #[cfg(feature = "http2")]
+pub use h2;
+#[cfg(feature = "http2")]
 pub use h2::frame::{PseudoOrder, SettingsOrder, StreamDependency, StreamId};
 
 #[doc(no_inline)]
