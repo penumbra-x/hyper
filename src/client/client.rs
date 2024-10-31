@@ -1241,7 +1241,7 @@ impl Builder {
     /// Http2 settings order
     #[cfg(feature = "http2")]
     #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
-    pub fn http2_settings_order(&mut self, order: Option<&'static [SettingsOrder]>) -> &mut Self {
+    pub fn http2_settings_order(&mut self, order: Option<[SettingsOrder; 8]>) -> &mut Self {
         self.conn_builder.http2_settings_order(order);
         self
     }
