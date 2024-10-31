@@ -70,7 +70,7 @@ pub(crate) struct Config {
     pub(crate) unknown_setting9: Option<bool>,
     pub(crate) headers_pseudo_order: Option<[PseudoOrder; 4]>,
     pub(crate) headers_priority: Option<StreamDependency>,
-    pub(crate) settings_order: Option<&'static [SettingsOrder]>
+    pub(crate) settings_order: Option<[SettingsOrder; 8]>
 }
 
 impl Default for Config {
@@ -137,7 +137,7 @@ fn new_builder(config: &Config) -> Builder {
     if let Some(order) = config.headers_pseudo_order {
         builder.headers_psuedo(order);
     }
-    if let Some(ref order) = config.settings_order {
+    if let Some(order) = config.settings_order {
         builder.settings_order(order);
     }
 
