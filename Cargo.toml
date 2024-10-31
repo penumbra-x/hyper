@@ -1,6 +1,6 @@
 [package]
 name = "rhyper"
-version = "0.14.51"
+version = "0.14.60"
 description = "A fast and correct HTTP library."
 readme = "README.md"
 homepage = "https://github.com/penumbra-x/hyper"
