@@ -38,5 +38,5 @@ hyper is provided under the MIT license. See [LICENSE](LICENSE).
 
 ## Accolades
 
-The project is based on a fork of [boring](https://github.com/hyperium/hyper).
+The project is based on a fork of [hyper](https://github.com/hyperium/hyper).
 
