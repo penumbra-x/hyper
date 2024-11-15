@@ -1,7 +1,7 @@
 #![deny(warnings)]
 #![deny(rust_2018_idioms)]
 #![cfg_attr(feature = "deprecated", allow(deprecated))]
-use rhyper as hyper;
+use hyper2 as hyper;
 
 use std::convert::TryInto;
 use std::future::Future;

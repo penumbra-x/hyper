@@ -4,7 +4,7 @@ use futures_util::{stream, StreamExt};
 use hyper::client::HttpConnector;
 use hyper::service::{make_service_fn, service_fn};
 use hyper::{header, Body, Client, Method, Request, Response, Server, StatusCode};
-use rhyper as hyper;
+use hyper2 as hyper;
 
 type GenericError = Box<dyn std::error::Error + Send + Sync>;
 type Result<T> = std::result::Result<T, GenericError>;

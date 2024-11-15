@@ -1,4 +1,4 @@
-use rhyper as hyper;
+use hyper2 as hyper;
 
 use hyper::service::Service;
 use hyper::{Body, Request, Response, Server};

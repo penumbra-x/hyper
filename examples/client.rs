@@ -1,6 +1,6 @@
 #![deny(warnings)]
 #![warn(rust_2018_idioms)]
-use rhyper as hyper;
+use hyper2 as hyper;
 use std::env;
 
 use hyper::{body::HttpBody as _, Client};

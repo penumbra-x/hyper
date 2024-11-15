@@ -1,10 +1,10 @@
 [package]
-name = "rhyper"
+name = "hyper2"
 version = "0.14.60"
 description = "A fast and correct HTTP library."
 readme = "README.md"
 homepage = "https://github.com/penumbra-x/hyper"
-documentation = "https://docs.rs/rhyper"
+documentation = "https://docs.rs/hyper2"
 repository = "https://github.com/penumbra-x/hyper"
 license = "MIT"
 authors = ["0x676e67 <gngppz@gmail.com>"]

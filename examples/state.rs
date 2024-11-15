@@ -1,5 +1,5 @@
 #![deny(warnings)]
-use rhyper as hyper;
+use hyper2 as hyper;
 
 use std::sync::{
     atomic::{AtomicUsize, Ordering},

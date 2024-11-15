@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-use rhyper as hyper;
+use hyper2 as hyper;
 
 use std::future::Future;
 use std::pin::Pin;
