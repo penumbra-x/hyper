@@ -568,9 +568,11 @@ where
 
     /// Set the connector for the client.
     #[inline]
-    pub fn set_connector(&mut self, connector: C)
+    pub fn set_connector<F>(&mut self, connector: F)
+    where
+        F: FnOnce(&mut C),
     {
-        self.connector = connector;
+        connector(&mut self.connector);
     }
 
     /// Set the connection builder for the client.

@@ -1,6 +1,6 @@
 [package]
 name = "hyper2"
-version = "0.14.65"
+version = "0.14.66"
 description = "A fast and correct HTTP library."
 readme = "README.md"
 homepage = "https://github.com/penumbra-x/hyper2"
