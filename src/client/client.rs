@@ -561,8 +561,24 @@ where
     }
 
     /// Reset the idle timeout for the pool.
+    #[inline]
     pub fn reset_pool_idle(&self) {
         self.pool.reset_idle();
+    }
+
+    /// Set the connector for the client.
+    #[inline]
+    pub fn set_connector(&mut self, connector: C)
+    {
+        self.connector = connector;
+    }
+
+    /// Set the connection builder for the client.
+    pub fn set_conn_builder<F>(&mut self, mut builder: F)
+    where
+        F: FnMut(&mut conn::Builder),
+    {
+        builder(&mut self.conn_builder);
     }
 }
 
