@@ -236,6 +236,8 @@ impl OriginalHeaderOrder {
 pub enum PoolKeyExt {
     /// Http,Https proxy pool key
     Http(Scheme, Authority),
+    /// Socks4 proxy pool key
+    Socks4(SocketAddr),
     /// Socks5 proxy pool key
     Socks5(SocketAddr),
 }
