@@ -31,6 +31,7 @@ use super::connect::{self, sealed::Connect, Alpn, Connected, Connection};
 use super::pool::{
     self, CheckoutIsClosedError, Key as PoolKey, Pool, Poolable, Pooled, Reservation,
 };
+use crate::ext::PoolKeyExt;
 #[cfg(feature = "tcp")]
 use super::HttpConnector;
 
@@ -207,7 +208,10 @@ where
             other => return ResponseFuture::error_version(other),
         };
 
-        let pool_key = match extract_domain(req.uri_mut(), is_http_connect) {
+        // get pool key ext from request extensions
+        let pool_key_ext = req.extensions_mut().remove::<PoolKeyExt>();
+
+        let pool_key = match extract_domain(req.uri_mut(), pool_key_ext, is_http_connect) {
             Ok(s) => s,
             Err(err) => {
                 return ResponseFuture::new(future::err(err));
@@ -561,12 +565,6 @@ where
         })
     }
 
-    /// Reset the idle timeout for the pool.
-    #[inline]
-    pub fn reset_pool_idle(&self) {
-        self.pool.reset_idle();
-    }
-
     /// Set the connector for the client.
     #[inline]
     pub fn set_connector<F>(&mut self, connector: F)
@@ -884,10 +882,10 @@ fn authority_form(uri: &mut Uri) {
     };
 }
 
-fn extract_domain(uri: &mut Uri, is_http_connect: bool) -> crate::Result<PoolKey> {
+fn extract_domain(uri: &mut Uri, ext: Option<PoolKeyExt>, is_http_connect: bool) -> crate::Result<PoolKey> {
     let uri_clone = uri.clone();
     match (uri_clone.scheme(), uri_clone.authority()) {
-        (Some(scheme), Some(auth)) => Ok((scheme.clone(), auth.clone())),
+        (Some(scheme), Some(auth)) => Ok((scheme.clone(), auth.clone(), ext)),
         (None, Some(auth)) if is_http_connect => {
             let scheme = match auth.port_u16() {
                 Some(443) => {
@@ -899,7 +897,7 @@ fn extract_domain(uri: &mut Uri, is_http_connect: bool) -> crate::Result<PoolKey
                     Scheme::HTTP
                 }
             };
-            Ok((scheme, auth.clone()))
+            Ok((scheme, auth.clone(), ext))
         }
         _ => {
             debug!("Client requires absolute-form URIs, received: {:?}", uri);
@@ -908,7 +906,7 @@ fn extract_domain(uri: &mut Uri, is_http_connect: bool) -> crate::Result<PoolKey
     }
 }
 
-fn domain_as_uri((scheme, auth): PoolKey) -> Uri {
+fn domain_as_uri((scheme, auth, _): PoolKey) -> Uri {
     http::uri::Builder::new()
         .scheme(scheme)
         .authority(auth)
@@ -1606,7 +1604,7 @@ mod unit_tests {
     #[test]
     fn test_extract_domain_connect_no_port() {
         let mut uri = "hyper.rs".parse().unwrap();
-        let (scheme, host) = extract_domain(&mut uri, true).expect("extract domain");
+        let (scheme, host, _) = extract_domain(&mut uri, None,  true).expect("extract domain");
         assert_eq!(scheme, *"http");
         assert_eq!(host, "hyper.rs");
     }

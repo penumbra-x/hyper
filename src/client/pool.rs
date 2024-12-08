@@ -19,6 +19,7 @@ use tokio::time::{Duration, Instant, Interval};
 use tracing::{debug, trace};
 
 use super::client::Ver;
+use crate::ext::PoolKeyExt;
 use crate::common::exec::Exec;
 
 // FIXME: allow() required due to `impl Trait` leaking types to this lint
@@ -61,7 +62,7 @@ pub(super) enum Reservation<T> {
 }
 
 /// Simple type alias in case the key type needs to be adjusted.
-pub(super) type Key = (http::uri::Scheme, http::uri::Authority); //Arc<String>;
+pub(super) type Key = (http::uri::Scheme, http::uri::Authority, Option<PoolKeyExt>);
 
 struct PoolInner<T> {
     // A flag that a connection is being established, and the connection
@@ -147,14 +148,6 @@ impl<T> Pool<T> {
             assert!(inner.idle_interval_ref.is_none(), "timer already spawned");
             let (tx, _) = oneshot::channel();
             inner.idle_interval_ref = Some(tx);
-        }
-    }
-
-    /// Reset the pool's idle connections.
-    pub(crate) fn reset_idle(&self) {
-        if let Some(ref inner) = self.inner {
-            let mut inner = inner.lock().unwrap();
-            inner.idle.clear();
         }
     }
 }
@@ -851,7 +844,7 @@ mod tests {
     }
 
     fn host_key(s: &str) -> Key {
-        (http::uri::Scheme::HTTP, s.parse().expect("host key"))
+        (http::uri::Scheme::HTTP, s.parse().expect("host key"), None)
     }
 
     fn pool_no_timer<T>() -> Pool<T> {

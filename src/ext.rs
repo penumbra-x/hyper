@@ -5,12 +5,15 @@ use bytes::Bytes;
 use http::header::HeaderName;
 #[cfg(feature = "http1")]
 use http::header::{IntoHeaderName, ValueIter};
+#[cfg(feature = "client")]
+use http::uri::{Authority, Scheme};
 use http::HeaderMap;
 #[cfg(feature = "ffi")]
 use std::collections::HashMap;
 #[cfg(feature = "http2")]
 use std::fmt;
-
+#[cfg(feature = "client")]
+use std::net::SocketAddr;
 #[cfg(any(feature = "http1", feature = "ffi"))]
 mod h1_reason_phrase;
 #[cfg(any(feature = "http1", feature = "ffi"))]
@@ -225,4 +228,14 @@ impl OriginalHeaderOrder {
     pub(crate) fn get_in_order(&self) -> impl Iterator<Item = &(HeaderName, usize)> {
         self.entry_order.iter()
     }
+}
+
+/// Extension for pool key
+#[cfg(feature = "client")]
+#[derive(Clone, Debug, Hash, PartialEq, Eq)]
+pub enum PoolKeyExt {
+    /// Http,Https proxy pool key
+    Http(Scheme, Authority),
+    /// Socks5 proxy pool key
+    Socks5(SocketAddr),
 }
