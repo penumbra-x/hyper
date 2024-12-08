@@ -3,6 +3,7 @@ use std::fmt;
 use std::future::Future;
 use std::marker::Unpin;
 use std::mem;
+use std::num::NonZeroUsize;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 use std::time::Duration;
@@ -983,6 +984,7 @@ impl Default for Builder {
             pool_config: pool::Config {
                 idle_timeout: Some(Duration::from_secs(90)),
                 max_idle_per_host: std::usize::MAX,
+                max_pool_size: None,
             },
         }
     }
@@ -1040,6 +1042,14 @@ impl Builder {
     /// Default is `usize::MAX` (no limit).
     pub fn pool_max_idle_per_host(&mut self, max_idle: usize) -> &mut Self {
         self.pool_config.max_idle_per_host = max_idle;
+        self
+    }
+
+    /// Sets the maximum number of connections in the pool.
+    ///
+    /// Default is `None` (no limit).
+    pub fn pool_max_size(&mut self, max_size: impl Into<Option<NonZeroUsize>>) -> &mut Self {
+        self.pool_config.max_pool_size = max_size.into();
         self
     }
 
