@@ -5,9 +5,12 @@ use bytes::Bytes;
 use http::header::HeaderName;
 #[cfg(feature = "http1")]
 use http::header::{IntoHeaderName, ValueIter};
-#[cfg(feature = "client")]
-use http::uri::{Authority, Scheme};
 use http::HeaderMap;
+#[cfg(feature = "client")]
+use http::{
+    uri::{Authority, Scheme},
+    HeaderValue,
+};
 #[cfg(feature = "ffi")]
 use std::collections::HashMap;
 #[cfg(feature = "http2")]
@@ -235,9 +238,9 @@ impl OriginalHeaderOrder {
 #[derive(Clone, Debug, Hash, PartialEq, Eq)]
 pub enum PoolKeyExt {
     /// Http,Https proxy pool key
-    Http(Scheme, Authority),
+    Http(Scheme, Authority, Option<HeaderValue>),
     /// Socks4 proxy pool key
-    Socks4(SocketAddr),
+    Socks4(SocketAddr, Option<(String, String)>),
     /// Socks5 proxy pool key
-    Socks5(SocketAddr),
+    Socks5(SocketAddr, Option<(String, String)>),
 }
