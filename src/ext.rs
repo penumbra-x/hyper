@@ -16,7 +16,7 @@ use std::collections::HashMap;
 #[cfg(feature = "http2")]
 use std::fmt;
 #[cfg(feature = "client")]
-use std::net::SocketAddr;
+use std::net::{IpAddr, SocketAddr};
 #[cfg(any(feature = "http1", feature = "ffi"))]
 mod h1_reason_phrase;
 #[cfg(any(feature = "http1", feature = "ffi"))]
@@ -237,6 +237,10 @@ impl OriginalHeaderOrder {
 #[cfg(feature = "client")]
 #[derive(Clone, Debug, Hash, PartialEq, Eq)]
 pub enum PoolKeyExt {
+    /// Interface name
+    Interface(std::borrow::Cow<'static, str>),
+    /// Local address
+    Address(Option<IpAddr>, Option<IpAddr>),
     /// Http,Https proxy pool key
     Http(Scheme, Authority, Option<HeaderValue>),
     /// Socks4 proxy pool key
