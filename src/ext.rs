@@ -238,6 +238,7 @@ impl OriginalHeaderOrder {
 #[derive(Clone, Debug, Hash, PartialEq, Eq)]
 pub enum PoolKeyExt {
     /// Interface name
+    #[cfg(any(target_os = "android", target_os = "fuchsia", target_os = "linux"))]
     Interface(std::borrow::Cow<'static, str>),
     /// Local address
     Address(Option<IpAddr>, Option<IpAddr>),
