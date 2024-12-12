@@ -137,3 +137,10 @@ cfg_feature! {
 
     pub mod server;
 }
+
+cfg_feature! {
+    #![feature = "http2"]
+
+    pub use h2;
+    pub use h2::frame::{PseudoOrder, SettingsOrder, StreamDependency, StreamId};
+}
