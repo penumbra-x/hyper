@@ -33,6 +33,8 @@ use crate::rt::bounds::Http2ClientConnExec;
 use crate::upgrade::Upgraded;
 use crate::{Request, Response};
 use h2::client::ResponseFuture;
+use h2::frame::{PseudoOrder, SettingsOrder, StreamDependency};
+
 
 type ClientRx<B> = crate::client::dispatch::Receiver<Request<B>, Response<IncomingBody>>;
 
@@ -69,15 +71,21 @@ pub(crate) struct Config {
     pub(crate) initial_stream_window_size: u32,
     pub(crate) initial_max_send_streams: usize,
     pub(crate) max_frame_size: Option<u32>,
-    pub(crate) max_header_list_size: u32,
     pub(crate) keep_alive_interval: Option<Duration>,
     pub(crate) keep_alive_timeout: Duration,
     pub(crate) keep_alive_while_idle: bool,
     pub(crate) max_concurrent_reset_streams: Option<usize>,
     pub(crate) max_send_buffer_size: usize,
-    pub(crate) max_pending_accept_reset_streams: Option<usize>,
-    pub(crate) header_table_size: Option<u32>,
     pub(crate) max_concurrent_streams: Option<u32>,
+    pub(crate) max_header_list_size: Option<u32>,
+    pub(crate) max_pending_accept_reset_streams: Option<usize>,
+    pub(crate) enable_push: Option<bool>,
+    pub(crate) header_table_size: Option<u32>,
+    pub(crate) unknown_setting8: Option<bool>,
+    pub(crate) unknown_setting9: Option<bool>,
+    pub(crate) headers_pseudo_order: Option<[PseudoOrder; 4]>,
+    pub(crate) headers_priority: Option<StreamDependency>,
+    pub(crate) settings_order: Option<[SettingsOrder; 8]>
 }
 
 impl Default for Config {
@@ -88,7 +96,7 @@ impl Default for Config {
             initial_stream_window_size: DEFAULT_STREAM_WINDOW,
             initial_max_send_streams: DEFAULT_INITIAL_MAX_SEND_STREAMS,
             max_frame_size: Some(DEFAULT_MAX_FRAME_SIZE),
-            max_header_list_size: DEFAULT_MAX_HEADER_LIST_SIZE,
+            max_header_list_size: Some(DEFAULT_MAX_HEADER_LIST_SIZE),
             keep_alive_interval: None,
             keep_alive_timeout: Duration::from_secs(20),
             keep_alive_while_idle: false,
@@ -97,6 +105,12 @@ impl Default for Config {
             max_pending_accept_reset_streams: None,
             header_table_size: None,
             max_concurrent_streams: None,
+            enable_push: None,
+            unknown_setting8: None,
+            unknown_setting9: None,
+            headers_pseudo_order: None,
+            headers_priority: None,
+            settings_order: None,
         }
     }
 }
@@ -107,23 +121,42 @@ fn new_builder(config: &Config) -> Builder {
         .initial_max_send_streams(config.initial_max_send_streams)
         .initial_window_size(config.initial_stream_window_size)
         .initial_connection_window_size(config.initial_conn_window_size)
-        .max_header_list_size(config.max_header_list_size)
-        .max_send_buffer_size(config.max_send_buffer_size)
-        .enable_push(false);
-    if let Some(max) = config.max_frame_size {
-        builder.max_frame_size(max);
+        .max_send_buffer_size(config.max_send_buffer_size);
+    if let Some(max) = config.max_pending_accept_reset_streams {
+        builder.max_pending_accept_reset_streams(max);
     }
     if let Some(max) = config.max_concurrent_reset_streams {
         builder.max_concurrent_reset_streams(max);
     }
-    if let Some(max) = config.max_pending_accept_reset_streams {
-        builder.max_pending_accept_reset_streams(max);
-    }
-    if let Some(size) = config.header_table_size {
-        builder.header_table_size(size);
-    }
     if let Some(max) = config.max_concurrent_streams {
         builder.max_concurrent_streams(max);
+    }
+    if let Some(max) = config.max_header_list_size {
+        builder.max_header_list_size(max);
+    }
+    if let Some(opt) = config.enable_push {
+        builder.enable_push(opt);
+    }
+    if let Some(max) = config.max_frame_size {
+        builder.max_frame_size(max);
+    }
+    if let Some(max) = config.header_table_size {
+        builder.header_table_size(max);
+    }
+    if let Some(v) = config.unknown_setting8 {
+        builder.unknown_setting8(v);
+    }
+    if let Some(v) = config.unknown_setting9 {
+        builder.unknown_setting9(v);
+    }
+    if let Some(priority) = config.headers_priority {
+        builder.headers_priority(priority);
+    }
+    if let Some(order) = config.headers_pseudo_order {
+        builder.headers_psuedo(order);
+    }
+    if let Some(order) = config.settings_order {
+        builder.settings_order(order);
     }
     builder
 }

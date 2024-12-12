@@ -11,6 +11,7 @@ use std::time::Duration;
 
 use crate::rt::{Read, Write};
 use futures_util::ready;
+use h2::frame::{PseudoOrder, SettingsOrder, StreamDependency};
 use http::{Request, Response};
 
 use super::super::dispatch::{self, TrySendError};
@@ -349,7 +350,7 @@ where
     ///
     /// Default is currently 16KB, but can change.
     pub fn max_header_list_size(&mut self, max: u32) -> &mut Self {
-        self.h2_builder.max_header_list_size = max;
+        self.h2_builder.max_header_list_size = Some(max);
         self
     }
 
@@ -390,6 +391,26 @@ where
     /// [Section 5.1.2]: https://http2.github.io/http2-spec/#rfc.section.5.1.2
     pub fn max_concurrent_streams(&mut self, max: impl Into<Option<u32>>) -> &mut Self {
         self.h2_builder.max_concurrent_streams = max.into();
+        self
+    }
+
+        /// Enables and disables the push feature for HTTP2.
+    ///
+    /// Passing `None` will do nothing.
+    pub fn enable_push(&mut self, opt: bool) -> &mut Self {
+        self.h2_builder.enable_push = Some(opt);
+        self
+    }
+
+    /// http2_unknown_setting8
+    pub fn unknown_setting8(&mut self, opt: bool) -> &mut Self {
+        self.h2_builder.unknown_setting8 = Some(opt);
+        self
+    }
+
+    /// http2_unknown_setting9
+    pub fn unknown_setting9(&mut self, opt: bool) -> &mut Self {
+        self.h2_builder.unknown_setting9 = Some(opt);
         self
     }
 
@@ -462,6 +483,27 @@ where
     /// See <https://github.com/hyperium/hyper/issues/2877> for more information.
     pub fn max_pending_accept_reset_streams(&mut self, max: impl Into<Option<usize>>) -> &mut Self {
         self.h2_builder.max_pending_accept_reset_streams = max.into();
+        self
+    }
+
+    /// HTTP/2 headers priority
+    pub fn headers_priority(&mut self, priority: Option<StreamDependency>) -> &mut Self {
+        self.h2_builder.headers_priority = priority;
+        self
+    }
+
+    /// Http2 headers pseudo header order
+    pub fn headers_pseudo_order(
+        &mut self,
+        order: Option<[PseudoOrder; 4]>,
+    ) -> &mut Self {
+        self.h2_builder.headers_pseudo_order = order;
+        self
+    }
+
+    /// Http2 settings order
+    pub fn settings_order(&mut self, order: Option<[SettingsOrder; 8]>) -> &mut Self {
+        self.h2_builder.settings_order = order;
         self
     }
 
