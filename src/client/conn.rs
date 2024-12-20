@@ -853,6 +853,14 @@ impl Builder {
         self
     }
 
+    /// Sets the first stream ID to something other than 1.
+    #[cfg(feature = "http2")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    pub fn initial_stream_id(&mut self, stream_id: Option<u32>) -> &mut Self {
+        self.h2_builder.initial_stream_id = stream_id;
+        self
+    }
+
     /// Sets the [`SETTINGS_INITIAL_WINDOW_SIZE`][spec] option for HTTP2
     /// stream-level flow control.
     ///

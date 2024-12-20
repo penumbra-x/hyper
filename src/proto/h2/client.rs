@@ -51,6 +51,7 @@ const DEFAULT_MAX_SEND_BUF_SIZE: usize = 1024 * 1024; // 1mb
 #[derive(Clone, Debug)]
 pub(crate) struct Config {
     pub(crate) adaptive_window: bool,
+    pub(crate) initial_stream_id: Option<u32>,
     pub(crate) initial_conn_window_size: u32,
     pub(crate) initial_stream_window_size: u32,
     pub(crate) max_frame_size: Option<u32>,
@@ -77,6 +78,7 @@ impl Default for Config {
     fn default() -> Config {
         Config {
             adaptive_window: false,
+            initial_stream_id: None,
             initial_conn_window_size: DEFAULT_CONN_WINDOW,
             initial_stream_window_size: DEFAULT_STREAM_WINDOW,
             max_frame_size: None,
@@ -107,6 +109,9 @@ fn new_builder(config: &Config) -> Builder {
         .initial_window_size(config.initial_stream_window_size)
         .initial_connection_window_size(config.initial_conn_window_size)
         .max_send_buffer_size(config.max_send_buffer_size);
+    if let Some(id) = config.initial_stream_id {
+        builder.initial_stream_id(id);
+    }
     if let Some(max) = config.max_concurrent_reset_streams {
         builder.max_concurrent_reset_streams(max);
     }
