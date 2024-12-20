@@ -51,9 +51,7 @@ type ConnEof = oneshot::Receiver<Infallible>;
 // for performance.
 const DEFAULT_CONN_WINDOW: u32 = 1024 * 1024 * 5; // 5mb
 const DEFAULT_STREAM_WINDOW: u32 = 1024 * 1024 * 2; // 2mb
-const DEFAULT_MAX_FRAME_SIZE: u32 = 1024 * 16; // 16kb
 const DEFAULT_MAX_SEND_BUF_SIZE: usize = 1024 * 1024; // 1mb
-const DEFAULT_MAX_HEADER_LIST_SIZE: u32 = 1024 * 16; // 16kb
 
 // The maximum number of concurrent streams that the client is allowed to open
 // before it receives the initial SETTINGS frame from the server.
@@ -97,8 +95,8 @@ impl Default for Config {
             initial_conn_window_size: DEFAULT_CONN_WINDOW,
             initial_stream_window_size: DEFAULT_STREAM_WINDOW,
             initial_max_send_streams: DEFAULT_INITIAL_MAX_SEND_STREAMS,
-            max_frame_size: Some(DEFAULT_MAX_FRAME_SIZE),
-            max_header_list_size: Some(DEFAULT_MAX_HEADER_LIST_SIZE),
+            max_frame_size: None,
+            max_header_list_size: None,
             keep_alive_interval: None,
             keep_alive_timeout: Duration::from_secs(20),
             keep_alive_while_idle: false,
