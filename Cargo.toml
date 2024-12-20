@@ -71,7 +71,7 @@ pnet_datalink = "0.27.2"
 
 [features]
 # Nothing by default
-default = ["full"]
+default = []
 
 # Easily turn it all on
 full = [
