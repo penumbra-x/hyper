@@ -322,6 +322,12 @@ where
         self
     }
 
+    /// Sets the initial stream id for the connection.
+    pub fn initial_stream_id(&mut self, id: impl Into<Option<u32>>) -> &mut Self {
+        self.h2_builder.initial_stream_id = id.into();
+        self
+    }
+
     /// Sets whether to use an adaptive flow control.
     ///
     /// Enabling this will override the limits set in
