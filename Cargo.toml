@@ -1,13 +1,12 @@
 [package]
-name = "hyper"
+name = "hyper2"
 version = "1.5.2"
 description = "A protective and efficient HTTP library for all."
 readme = "README.md"
-homepage = "https://hyper.rs"
-documentation = "https://docs.rs/hyper"
-repository = "https://github.com/hyperium/hyper"
+documentation = "https://docs.rs/hyper2"
+repository = "https://github.com/penumbra-x/hyper2"
 license = "MIT"
-authors = ["Sean McArthur <sean@seanmonstar.com>"]
+authors = ["0x676e67 <gngppz@gmail.com>"]
 keywords = ["http", "hyper", "hyperium"]
 categories = ["network-programming", "web-programming::http-client", "web-programming::http-server"]
 edition = "2021"
