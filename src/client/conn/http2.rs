@@ -11,7 +11,7 @@ use std::time::Duration;
 
 use crate::rt::{Read, Write};
 use futures_util::ready;
-use h2::frame::{OptionPriority, PseudoOrder, SettingsOrder, StreamDependency};
+use h2::frame::{Priority, PseudoOrder, SettingsOrder, StreamDependency};
 use http::{Request, Response};
 
 use super::super::dispatch::{self, TrySendError};
@@ -514,7 +514,7 @@ where
     }
 
     /// Http2 priority frames
-    pub fn priority(&mut self, priority: Option<Vec<OptionPriority>>) -> &mut Self {
+    pub fn priority(&mut self, priority: Option<Vec<Priority>>) -> &mut Self {
         self.h2_builder.priority = priority;
         self
     }

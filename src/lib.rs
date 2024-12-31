@@ -142,5 +142,5 @@ cfg_feature! {
     #![feature = "http2"]
 
     pub use h2;
-    pub use h2::frame::{PseudoOrder, SettingsOrder, StreamDependency, StreamId, OptionPriority};
+    pub use h2::frame::{PseudoOrder, SettingsOrder, StreamDependency, StreamId, Priority};
 }
