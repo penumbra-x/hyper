@@ -1,10 +1,6 @@
 # [hyper](https://hyper.rs)
 
-[![crates.io](https://img.shields.io/crates/v/hyper.svg)](https://crates.io/crates/hyper)
-[![Released API docs](https://docs.rs/hyper/badge.svg)](https://docs.rs/hyper)
-[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-[![CI](https://github.com/hyperium/hyper/workflows/CI/badge.svg)](https://github.com/hyperium/hyper/actions?query=workflow%3ACI)
-[![Discord chat][discord-badge]][discord-url]
+[![crates.io](https://img.shields.io/crates/v/hyper2.svg)](https://crates.io/crates/hyper2)
 
 A protective and efficient HTTP library for all.
 
@@ -42,3 +38,7 @@ hyper is provided under the MIT license. See [LICENSE](LICENSE).
 
 [discord-badge]: https://img.shields.io/discord/500028886025895936.svg?logo=discord
 [discord-url]: https://discord.gg/kkwpueZ
+
+## Accolades
+
+The project is based on a fork of [hyper](https://github.com/hyperium/hyper).
