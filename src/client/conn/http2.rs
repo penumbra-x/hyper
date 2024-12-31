@@ -1,5 +1,6 @@
 //! HTTP/2 client connections
 
+use std::borrow::Cow;
 use std::error::Error;
 use std::fmt;
 use std::future::Future;
@@ -514,7 +515,7 @@ where
     }
 
     /// Http2 priority frames
-    pub fn priority(&mut self, priority: Option<Vec<Priority>>) -> &mut Self {
+    pub fn priority(&mut self, priority: Option<Cow<'static, [Priority]>>) -> &mut Self {
         self.h2_builder.priority = priority;
         self
     }

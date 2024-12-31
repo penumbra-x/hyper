@@ -1,10 +1,5 @@
 use std::{
-    convert::Infallible,
-    future::Future,
-    marker::PhantomData,
-    pin::Pin,
-    task::{Context, Poll},
-    time::Duration,
+    borrow::Cow, convert::Infallible, future::Future, marker::PhantomData, pin::Pin, task::{Context, Poll}, time::Duration
 };
 
 use crate::rt::{Read, Write};
@@ -85,7 +80,7 @@ pub(crate) struct Config {
     pub(crate) headers_pseudo_order: Option<[PseudoOrder; 4]>,
     pub(crate) headers_priority: Option<StreamDependency>,
     pub(crate) settings_order: Option<[SettingsOrder; 8]>,
-    pub(crate) priority: Option<Vec<Priority>>
+    pub(crate) priority: Option<Cow<'static, [Priority]>>
 }
 
 impl Default for Config {
