@@ -1,5 +1,6 @@
 //! HTTP/2 client connections
 
+use std::borrow::Cow;
 use std::error::Error;
 use std::fmt;
 use std::future::Future;
@@ -11,7 +12,7 @@ use std::time::Duration;
 
 use crate::rt::{Read, Write};
 use futures_util::ready;
-use h2::frame::{PseudoOrder, SettingsOrder, StreamDependency};
+use h2::frame::{Priority, PseudoOrder, SettingsOrder, StreamDependency};
 use http::{Request, Response};
 
 use super::super::dispatch::{self, TrySendError};
@@ -510,6 +511,12 @@ where
     /// Http2 settings order
     pub fn settings_order(&mut self, order: Option<[SettingsOrder; 8]>) -> &mut Self {
         self.h2_builder.settings_order = order;
+        self
+    }
+
+    /// Http2 priority frames
+    pub fn priority(&mut self, priority: Option<Cow<'static, [Priority]>>) -> &mut Self {
+        self.h2_builder.priority = priority;
         self
     }
 
