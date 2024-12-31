@@ -14,7 +14,7 @@ use futures_channel::{mpsc, oneshot};
 use futures_util::future::{Either, FusedFuture, FutureExt as _};
 use futures_util::ready;
 use futures_util::stream::{StreamExt as _, StreamFuture};
-use h2::client::{Builder, Connection, SendRequest};
+use h2::{client::{Builder, Connection, SendRequest}, frame::OptionPriority};
 use h2::SendStream;
 use http::{Method, StatusCode};
 use pin_project_lite::pin_project;
@@ -84,7 +84,8 @@ pub(crate) struct Config {
     pub(crate) unknown_setting9: Option<bool>,
     pub(crate) headers_pseudo_order: Option<[PseudoOrder; 4]>,
     pub(crate) headers_priority: Option<StreamDependency>,
-    pub(crate) settings_order: Option<[SettingsOrder; 8]>
+    pub(crate) settings_order: Option<[SettingsOrder; 8]>,
+    pub(crate) priority: Option<Vec<OptionPriority>>
 }
 
 impl Default for Config {
@@ -111,6 +112,7 @@ impl Default for Config {
             headers_pseudo_order: None,
             headers_priority: None,
             settings_order: None,
+            priority: None,
         }
     }
 }
@@ -160,6 +162,9 @@ fn new_builder(config: &Config) -> Builder {
     }
     if let Some(order) = config.settings_order {
         builder.settings_order(order);
+    }
+    if let Some(ref priority) = config.priority {
+        builder.priority(priority.clone());
     }
     builder
 }
