@@ -1,6 +1,6 @@
 [package]
 name = "hyper2"
-version = "1.5.3"
+version = "1.5.5"
 description = "A protective and efficient HTTP library for all."
 readme = "README.md"
 documentation = "https://docs.rs/hyper2"
